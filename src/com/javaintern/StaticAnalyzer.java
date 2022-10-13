@@ -69,6 +69,7 @@ public final class StaticAnalyzer {
             distributionOfLetters.put(entry.getKey(), normalizedValue);
         }
 
+        //Add missing letters of alphabite that wasn't in the text
         for (char beginLetter = EnglishAlphabet.START_UPPERCASE_LETTER; beginLetter <= EnglishAlphabet.END_UPPERCASE_LETTER; beginLetter++) {
             distributionOfLetters.putIfAbsent(beginLetter, 0.0);
         }

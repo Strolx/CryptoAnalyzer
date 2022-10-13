@@ -74,19 +74,18 @@ public final class CryptoAnalyzer {
     }
 
     private static void writeInFile(String text, String outputFileName) {
-        try {
-            FileChannel fileChannel = FileChannel.open(Path.of(outputFileName), StandardOpenOption.READ, StandardOpenOption.WRITE, StandardOpenOption.CREATE);
+        try (FileChannel fileChannel = FileChannel.open(Path.of(outputFileName), StandardOpenOption.READ, StandardOpenOption.WRITE, StandardOpenOption.CREATE)) {
             byte[] textInBytes = text.getBytes();
             ByteBuffer buffer = ByteBuffer.allocate(textInBytes.length);
             buffer.put(textInBytes);
             buffer.flip();
             fileChannel.write(buffer);
         } catch (IOException e) {
-            new RuntimeException(e);
+            throw new RuntimeException(e);
         }
     }
 
-    private static String getPathToOutputFile(Integer value2) {
+    private static String getPathToOutputFile(Integer key) {
         String[] pathExt = pathToFile.split("\\.");
         String pathToFileWithoutExt = pathExt[0];
         String ext = pathExt[1];
@@ -97,14 +96,13 @@ public final class CryptoAnalyzer {
                 || BRUTE_FORCE_OPERATION.equals(operation)) {
             operationName = "decoded";
         }
-        String key = !BRUTE_FORCE_OPERATION.equals(operation) ? "" : " key-" + value2;
-        return String.format("%s(%s%s).%s", pathToFileWithoutExt, operationName, key, ext);
+        String keyText = !BRUTE_FORCE_OPERATION.equals(operation) ? "" : " key-" + key;
+        return String.format("%s(%s%s).%s", pathToFileWithoutExt, operationName, keyText, ext);
     }
 
     private static String getTextFromFile(String path) {
         StringBuilder text = new StringBuilder();
-        try {
-            FileChannel fileChannel = FileChannel.open(Path.of(path), StandardOpenOption.READ);
+        try (FileChannel fileChannel = FileChannel.open(Path.of(path), StandardOpenOption.READ)) {
             ByteBuffer buffer = ByteBuffer.allocate(1024);
             while (fileChannel.read(buffer) > 0) {
                 buffer.flip();

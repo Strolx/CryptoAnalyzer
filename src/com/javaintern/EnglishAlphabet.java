@@ -8,6 +8,7 @@ public final class EnglishAlphabet {
     public static final char START_LOWERCASE_LETTER = 'a';
     public static final char END_LOWERCASE_LETTER = 'z';
 
+    private EnglishAlphabet() {}
     public static char getShiftedLetter(char letter, int shift) {
 
         if (shift == 0) {
@@ -16,7 +17,7 @@ public final class EnglishAlphabet {
 
         char newLetter = letter;
         int offset = 0;
-        int posInAlphabet = 0;
+        int posInAlphabet;
 
         if (letter >= EnglishAlphabet.START_UPPERCASE_LETTER && letter <= EnglishAlphabet.END_UPPERCASE_LETTER) {
             offset = EnglishAlphabet.START_UPPERCASE_LETTER;
@@ -35,5 +36,4 @@ public final class EnglishAlphabet {
         return newLetter;
     }
 
-    private EnglishAlphabet() {}
 }
